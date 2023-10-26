@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var currencyRV: RecyclerView
     private lateinit var searchEdt: EditText
-
+    private val currencyModalArrayList = mutableListOf<Currencymodel>()
     private lateinit var loadingPB: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,8 +49,43 @@ class MainActivity : AppCompatActivity() {
         loadingPB = findViewById(R.id.idPBLoading)
         currencyRV = findViewById(R.id.idRVcurrency)
 
+        searchEdt.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
 
+            }
 
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable) {
+
+                filter(s.toString())
+            }
+        })
+
+    }
+
+    private fun filter(filter: String) {
+        // Create a new mutable list to store the filtered data.
+        val filteredList = mutableListOf<Currencymodel>()
+
+        // Iterate over the original list and add the items that match the filter to the filtered list.
+
+        for (item in currencyModalArrayList) {
+            if (item.name.toLowerCase().contains(filter.toLowerCase())) {
+                filteredList.add(item)
+            }
+        }
+
+        // Check if the filtered list is empty.
+        if (filteredList.isEmpty()) {
+            // Display a toast message indicating that no currency was found.
+            Toast.makeText(this, "No currency found..", Toast.LENGTH_SHORT).show()
+        } else {
+            // Update the recycler view with the filtered list.
+            currencyRV.filterList(filteredList)
+        }
     }
 
         private fun getCurrencyList(){
